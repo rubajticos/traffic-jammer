@@ -1,13 +1,15 @@
-package pl.rubajticos.trafficjammer.model
+package pl.rubajticos.trafficjammer.domain.model
 
 import java.util.*
 
 data class JamSection(
+    val id: Long = -1,
     val routeName: String,
     val trafficSignals: List<TrafficSignal>
 )
 
 data class TrafficSignal(
+    val id: Long = -1,
     val directionTo: String,
     val config: TrafficSignalConfig,
     val changes: List<TrafficSignalState>,
@@ -23,6 +25,7 @@ data class TrafficSignalConfig(
 )
 
 data class TrafficSignalState(
+    val id: Long = -1,
     val changeDate: Date,
     val color: TrafficSignalColor,
     val executed: Boolean = false
