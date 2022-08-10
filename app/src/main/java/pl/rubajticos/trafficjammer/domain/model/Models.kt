@@ -1,5 +1,6 @@
 package pl.rubajticos.trafficjammer.domain.model
 
+import java.time.LocalDateTime
 import java.util.*
 
 data class JamSection(
@@ -24,7 +25,7 @@ data class TrafficSignalConfig(
 
 data class TrafficSignalState(
     val id: Int? = null,
-    val changeDate: Date,
+    val changeDate: LocalDateTime,
     val color: TrafficSignalColor,
     val executed: Boolean = false
 )

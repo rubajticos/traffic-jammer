@@ -1,8 +1,7 @@
 package pl.rubajticos.trafficjammer.common
 
-import java.util.*
-import java.util.concurrent.TimeUnit
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
-fun Date.minusToSeconds(date: Date): Long = TimeUnit.MILLISECONDS.toSeconds(
-    this.time - date.time
-)
+fun LocalDateTime.betweenInSeconds(date: LocalDateTime): Long =
+    ChronoUnit.SECONDS.between(date, this)

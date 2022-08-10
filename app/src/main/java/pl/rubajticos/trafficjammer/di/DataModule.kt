@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import pl.rubajticos.trafficjammer.data.local.RoomJamSectionDataSource
 import pl.rubajticos.trafficjammer.data.local.RoomTrafficSignalDataSource
 import pl.rubajticos.trafficjammer.data.local.RoomTrafficSignalStateDataSource
+import pl.rubajticos.trafficjammer.domain.TrafficSignalFactory
 import pl.rubajticos.trafficjammer.domain.data_source.JamSectionDataSource
 import pl.rubajticos.trafficjammer.domain.data_source.TrafficSignalDataSource
 import pl.rubajticos.trafficjammer.domain.data_source.TrafficSignalStateDataSource
