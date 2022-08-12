@@ -28,7 +28,8 @@ class TrafficSignalFactory @Inject constructor(
                 executed = true
             )
         )
-        repeat(INITIAL_NUM_OF_STATES) {
+        val tomorrow = LocalDateTime.now().plusDays(1)
+        while (states.last().changeDate.isBefore(tomorrow)) {
             val nextState = statesGenerator.calculateNextState(config, states.last())
             states.add(nextState)
         }
@@ -38,10 +39,5 @@ class TrafficSignalFactory @Inject constructor(
             config = config,
             changes = states.toList()
         )
-    }
-
-
-    companion object {
-        private const val INITIAL_NUM_OF_STATES = 100
     }
 }

@@ -1,8 +1,12 @@
 package pl.rubajticos.trafficjammer.domain.data_source
 
+import pl.rubajticos.trafficjammer.domain.model.JamSection
+
 interface JamSectionDataSource {
 
-    suspend fun addJamSection(routeName: String, trafficSignalsIds: List<Long>): Long
+    suspend fun addJamSection(jamSection: JamSection)
 
     suspend fun findAllJamSectionsIds(): List<Long>
+
+    suspend fun findJamSectionById(id: Long): JamSection
 }
