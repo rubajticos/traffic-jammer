@@ -1,5 +1,6 @@
 package pl.rubajticos.trafficjammer.domain.data_source
 
+import kotlinx.coroutines.flow.Flow
 import pl.rubajticos.trafficjammer.domain.model.JamSection
 
 interface JamSectionDataSource {
@@ -9,4 +10,5 @@ interface JamSectionDataSource {
     suspend fun findAllJamSections(): List<JamSection>
 
     suspend fun findJamSectionById(id: Long): JamSection
+    suspend fun getAllSections(): Flow<List<JamSection>>
 }

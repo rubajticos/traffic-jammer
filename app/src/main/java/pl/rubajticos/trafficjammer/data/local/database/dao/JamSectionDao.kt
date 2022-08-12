@@ -1,9 +1,7 @@
 package pl.rubajticos.trafficjammer.data.local.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import pl.rubajticos.trafficjammer.data.local.database.model.JamSectionEntity
 import pl.rubajticos.trafficjammer.data.local.database.model.JamSectionWithSignals
 import pl.rubajticos.trafficjammer.data.local.database.model.TrafficSignalEntity
@@ -24,6 +22,13 @@ interface JamSectionDao {
     @Transaction
     @Query("SELECT * from JamSectionEntity")
     fun findAllJamSections(): List<JamSectionWithSignals>
+
+    @Transaction
+    @Query("SELECT * from JamSectionEntity")
+    fun observeAllJamSections(): Flow<List<JamSectionWithSignals>>
+
+    @Update
+    fun updateState(state: TrafficSignalStateEntity)
 
     @Transaction
     fun insertJamSectionWithSignalsAndStates(

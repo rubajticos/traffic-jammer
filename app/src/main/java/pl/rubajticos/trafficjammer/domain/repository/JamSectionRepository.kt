@@ -10,4 +10,5 @@ interface JamSectionRepository {
     suspend fun findSection(long: Long): Flow<JamSection>
 
     suspend fun findAllSections(): List<JamSection>
+    suspend fun getAllSections(): Flow<List<JamSection>>
 }

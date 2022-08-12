@@ -1,5 +1,7 @@
 package pl.rubajticos.trafficjammer.data.local
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import pl.rubajticos.trafficjammer.data.local.database.dao.JamSectionDao
 import pl.rubajticos.trafficjammer.data.local.database.model.JamSectionEntity
 import pl.rubajticos.trafficjammer.data.local.database.model.TrafficSignalConfig
@@ -7,6 +9,9 @@ import pl.rubajticos.trafficjammer.data.local.database.model.TrafficSignalEntity
 import pl.rubajticos.trafficjammer.data.local.database.model.TrafficSignalStateEntity
 import pl.rubajticos.trafficjammer.domain.data_source.JamSectionDataSource
 import pl.rubajticos.trafficjammer.domain.model.JamSection
+import pl.rubajticos.trafficjammer.domain.model.TrafficSignal
+import pl.rubajticos.trafficjammer.domain.model.TrafficSignalColor
+import pl.rubajticos.trafficjammer.domain.model.TrafficSignalState
 import javax.inject.Inject
 
 class RoomJamSectionDataSource @Inject constructor(
@@ -38,6 +43,11 @@ class RoomJamSectionDataSource @Inject constructor(
 
     override suspend fun findAllJamSections(): List<JamSection> {
         val sections = dao.findAllJamSections()
+        Thread.sleep(5000)
+        val state = sections.first().trafficSignals.first().states[2]
+        dao.updateState(state.copy(executed = true))
+        Thread.sleep(10000)
+
         return sections.map { JamSection(routeName = "test", trafficSignals = emptyList()) }
     }
 
@@ -45,5 +55,16 @@ class RoomJamSectionDataSource @Inject constructor(
         TODO("Not yet implemented")
     }
 
-
+    override suspend fun getAllSections(): Flow<List<JamSection>> {
+        return dao.observeAllJamSections().map {
+            it.map {
+                val signals = it.trafficSignals.map {
+                    val states = it.states.map(TrafficSignalStateEntity::toDomain)
+                    val config = it.trafficSignalEntity.config.toDomain()
+                    it.trafficSignalEntity.toDomain(states, config)
+                }
+                it.jamSection.toDomain(signals)
+            }
+        }
+    }
 }

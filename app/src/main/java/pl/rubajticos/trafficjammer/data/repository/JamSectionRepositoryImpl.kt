@@ -22,4 +22,8 @@ class JamSectionRepositoryImpl @Inject constructor(
     override suspend fun findAllSections(): List<JamSection> {
         return jamSectionDataSource.findAllJamSections()
     }
+
+    override suspend fun getAllSections(): Flow<List<JamSection>> {
+        return jamSectionDataSource.getAllSections()
+    }
 }

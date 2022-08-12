@@ -22,6 +22,14 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            repository.getAllSections().collect {
+                Log.d("MRMR", "new sections !")
+                val trafficSignalState = it.first().trafficSignals.first().changes[2]
+                Log.d("MRMR", trafficSignalState.toString())
+            }
+        }
+
+        viewModelScope.launch {
             val timeStart = System.currentTimeMillis()
             val format: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
             val greenLight = LocalDateTime.parse("10-08-2022 07:15:15", format)
