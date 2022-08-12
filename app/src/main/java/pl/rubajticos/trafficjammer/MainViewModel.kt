@@ -8,16 +8,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.rubajticos.trafficjammer.domain.TrafficSignalFactory
+import pl.rubajticos.trafficjammer.domain.model.JamSection
+import pl.rubajticos.trafficjammer.domain.repository.JamSectionRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.time.TimeSource
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val trafficSignalFactory: TrafficSignalFactory,
+    private val repository: JamSectionRepository
 ) : ViewModel() {
 
     init {
@@ -36,7 +36,16 @@ class MainViewModel @Inject constructor(
                     secondGreenLight
                 )
                 val timeEnd = System.currentTimeMillis()
-                Log.d("MRMR", "${timeEnd - timeStart }")
+                Log.d("MRMR", "${timeEnd - timeStart}")
+
+                val jamSection = JamSection(
+                    routeName = "Lutcza - Strzyżów",
+                    trafficSignals = listOf(trafficSignal)
+                )
+
+                repository.addSection(jamSection)
+                val sections = repository.findAllSections()
+                Log.d("MRMR", "sections size = ${sections.size}")
             }
         }
     }

@@ -6,7 +6,7 @@ interface JamSectionDataSource {
 
     suspend fun addJamSection(jamSection: JamSection)
 
-    suspend fun findAllJamSectionsIds(): List<Long>
+    suspend fun findAllJamSections(): List<JamSection>
 
     suspend fun findJamSectionById(id: Long): JamSection
 }

@@ -11,7 +11,8 @@ class JamSectionRepositoryImpl @Inject constructor(
 ) : JamSectionRepository {
 
     override suspend fun addSection(section: JamSection): JamSection {
-        TODO("Not yet implemented")
+        jamSectionDataSource.addJamSection(section)
+        return section
     }
 
     override suspend fun findSection(long: Long): Flow<JamSection> {
@@ -19,6 +20,6 @@ class JamSectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun findAllSections(): List<JamSection> {
-        TODO("Not yet implemented")
+        return jamSectionDataSource.findAllJamSections()
     }
 }
