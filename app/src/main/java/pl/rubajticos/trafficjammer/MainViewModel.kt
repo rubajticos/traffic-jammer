@@ -26,6 +26,17 @@ class MainViewModel @Inject constructor(
                 Log.d("MRMR", "new sections !")
                 val trafficSignalState = it.first().trafficSignals.first().changes[2]
                 Log.d("MRMR", trafficSignalState.toString())
+                Log.d("MRMR", "IDS = ${it.map { it.id }.joinToString(", ")}")
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("MRMR", "SINGLE JAM SECTION")
+            val jam = repository.findSectionById(1)
+            jam?.let {
+                Log.d("MRMR", "Hello there -> $it")
+            } ?: run {
+                Log.d("MRMR", "Not found")
             }
         }
 

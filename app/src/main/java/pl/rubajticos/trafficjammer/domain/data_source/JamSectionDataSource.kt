@@ -9,6 +9,7 @@ interface JamSectionDataSource {
 
     suspend fun findAllJamSections(): List<JamSection>
 
-    suspend fun findJamSectionById(id: Long): JamSection
-    suspend fun getAllSections(): Flow<List<JamSection>>
+    suspend fun findJamSectionById(id: Long): JamSection?
+
+    fun getAllSections(): Flow<List<JamSection>>
 }

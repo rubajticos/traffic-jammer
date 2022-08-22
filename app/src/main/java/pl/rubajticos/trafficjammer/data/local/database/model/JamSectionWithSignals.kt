@@ -1,6 +1,5 @@
 package pl.rubajticos.trafficjammer.data.local.database.model
 
-import androidx.room.DatabaseView
 import androidx.room.Embedded
 import androidx.room.Relation
 

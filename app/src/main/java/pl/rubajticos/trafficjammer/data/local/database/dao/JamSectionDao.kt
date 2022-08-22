@@ -27,6 +27,10 @@ interface JamSectionDao {
     @Query("SELECT * from JamSectionEntity")
     fun observeAllJamSections(): Flow<List<JamSectionWithSignals>>
 
+    @Transaction
+    @Query("SELECT * from JamSectionEntity where jamSectionId = :id")
+    fun findSectionById(id: Long): JamSectionWithSignals?
+
     @Update
     fun updateState(state: TrafficSignalStateEntity)
 

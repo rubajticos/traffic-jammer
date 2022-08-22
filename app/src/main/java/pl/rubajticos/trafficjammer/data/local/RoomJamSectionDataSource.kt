@@ -10,8 +10,6 @@ import pl.rubajticos.trafficjammer.data.local.database.model.TrafficSignalStateE
 import pl.rubajticos.trafficjammer.domain.data_source.JamSectionDataSource
 import pl.rubajticos.trafficjammer.domain.model.JamSection
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignal
-import pl.rubajticos.trafficjammer.domain.model.TrafficSignalColor
-import pl.rubajticos.trafficjammer.domain.model.TrafficSignalState
 import javax.inject.Inject
 
 class RoomJamSectionDataSource @Inject constructor(
@@ -51,11 +49,18 @@ class RoomJamSectionDataSource @Inject constructor(
         return sections.map { JamSection(routeName = "test", trafficSignals = emptyList()) }
     }
 
-    override suspend fun findJamSectionById(id: Long): JamSection {
-        TODO("Not yet implemented")
+    override suspend fun findJamSectionById(id: Long): JamSection? {
+        val sectionEntity = dao.findSectionById(id) ?: return null
+
+        val signals: List<TrafficSignal> = sectionEntity.trafficSignals.map {
+            val states = it.states.map { it.toDomain() }
+            val config = it.trafficSignalEntity.config.toDomain()
+            it.trafficSignalEntity.toDomain(states, config)
+        }
+        return sectionEntity.jamSection.toDomain(signals)
     }
 
-    override suspend fun getAllSections(): Flow<List<JamSection>> {
+    override fun getAllSections(): Flow<List<JamSection>> {
         return dao.observeAllJamSections().map {
             it.map {
                 val signals = it.trafficSignals.map {
