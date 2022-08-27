@@ -3,11 +3,11 @@ package pl.rubajticos.trafficjammer.data.local.database.model
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 import pl.rubajticos.trafficjammer.domain.model.JamSection
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignal
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignalColor
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignalState
-import java.time.LocalDateTime
 
 @Entity
 data class JamSectionEntity(
@@ -62,11 +62,17 @@ data class TrafficSignalStateEntity(
 }
 
 data class TrafficSignalConfig(
+    val initialGreenLightDate: LocalDateTime,
+    val initialRedLightDate: LocalDateTime,
+    val initialSecondGreenLightDate: LocalDateTime,
     val greenLightDuration: Long,
     val redLightDuration: Long,
 ) {
     fun toDomain(): pl.rubajticos.trafficjammer.domain.model.TrafficSignalConfig {
         return pl.rubajticos.trafficjammer.domain.model.TrafficSignalConfig(
+            this.initialGreenLightDate,
+            this.initialRedLightDate,
+            this.initialSecondGreenLightDate,
             this.greenLightDuration,
             this.redLightDuration
         )

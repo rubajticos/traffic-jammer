@@ -1,13 +1,13 @@
 package pl.rubajticos.trafficjammer.domain
 
+import java.time.LocalDateTime
+import javax.inject.Inject
 import pl.rubajticos.trafficjammer.common.betweenInSeconds
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignal
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignalColor
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignalConfig
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignalState
 import pl.rubajticos.trafficjammer.domain.utils.TrafficStateGenerator
-import java.time.LocalDateTime
-import javax.inject.Inject
 
 class TrafficSignalFactory @Inject constructor(
     private val statesGenerator: TrafficStateGenerator
@@ -20,7 +20,13 @@ class TrafficSignalFactory @Inject constructor(
     ): TrafficSignal {
         val greenDuration = redLightDate.betweenInSeconds(greenLightDate)
         val redDuration = secondGreenLightDate.betweenInSeconds(redLightDate)
-        val config = TrafficSignalConfig(greenDuration, redDuration)
+        val config = TrafficSignalConfig(
+            greenLightDate,
+            redLightDate,
+            secondGreenLightDate,
+            greenDuration,
+            redDuration
+        )
         val states = mutableListOf(
             TrafficSignalState(
                 changeDate = secondGreenLightDate,

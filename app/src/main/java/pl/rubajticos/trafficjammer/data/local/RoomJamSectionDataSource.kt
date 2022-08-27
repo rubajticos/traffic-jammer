@@ -1,5 +1,6 @@
 package pl.rubajticos.trafficjammer.data.local
 
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import pl.rubajticos.trafficjammer.data.local.database.dao.JamSectionDao
@@ -10,7 +11,6 @@ import pl.rubajticos.trafficjammer.data.local.database.model.TrafficSignalStateE
 import pl.rubajticos.trafficjammer.domain.data_source.JamSectionDataSource
 import pl.rubajticos.trafficjammer.domain.model.JamSection
 import pl.rubajticos.trafficjammer.domain.model.TrafficSignal
-import javax.inject.Inject
 
 class RoomJamSectionDataSource @Inject constructor(
     private val dao: JamSectionDao
@@ -24,7 +24,13 @@ class RoomJamSectionDataSource @Inject constructor(
         val trafficSignals = jamSection.trafficSignals.associate {
             val signal = TrafficSignalEntity(
                 directionTo = it.directionTo,
-                config = TrafficSignalConfig(it.config.greenDuration, it.config.redDuration),
+                config = TrafficSignalConfig(
+                    it.config.initialGreenLight,
+                    it.config.initialRedLight,
+                    it.config.initialSecondGreenLight,
+                    it.config.greenDuration,
+                    it.config.redDuration
+                ),
             )
             val states = it.changes.map {
                 TrafficSignalStateEntity(

@@ -19,9 +19,12 @@ data class TrafficSignal(
 )
 
 data class TrafficSignalConfig(
+    val initialGreenLight: LocalDateTime,
+    val initialRedLight: LocalDateTime,
+    val initialSecondGreenLight: LocalDateTime,
     val greenDuration: Long,
     val redDuration: Long
-)
+) {}
 
 data class TrafficSignalState(
     val id: Long? = null,
