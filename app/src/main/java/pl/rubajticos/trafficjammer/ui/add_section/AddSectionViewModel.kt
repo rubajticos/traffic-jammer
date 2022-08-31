@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.rubajticos.trafficjammer.common.Resource
 import pl.rubajticos.trafficjammer.domain.use_case.CreateJamSectionUseCase
@@ -24,18 +23,18 @@ class AddSectionViewModel @Inject constructor(
     val state: State<AddSectionScreenContract.UiState> = _state
 
     fun handleUiEvent(event: AddSectionScreenContract.UiEvent) =
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             when (event) {
                 AddSectionScreenContract.UiEvent.CreateSection -> trySaveSection()
-                is AddSectionScreenContract.UiEvent.onGreeenLightDateChanged ->
+                is AddSectionScreenContract.UiEvent.OnGreenLightDateChanged ->
                     _state.value = _state.value.copy(greenLightTime = event.date)
-                is AddSectionScreenContract.UiEvent.onRedLightDateChanged ->
+                is AddSectionScreenContract.UiEvent.OnRedLightDateChanged ->
                     _state.value = _state.value.copy(redLightTime = event.date)
-                is AddSectionScreenContract.UiEvent.onSecondGreeenLightDateChanged ->
+                is AddSectionScreenContract.UiEvent.OnSecondGreenLightDateChanged ->
                     _state.value = _state.value.copy(secondGreenLightTime = event.date)
-                is AddSectionScreenContract.UiEvent.onDirectionToChanges ->
+                is AddSectionScreenContract.UiEvent.OnDirectionToChanges ->
                     _state.value = _state.value.copy(trafficSignalDirectionTo = event.direction)
-                is AddSectionScreenContract.UiEvent.onRouteNameChanged ->
+                is AddSectionScreenContract.UiEvent.OnRouteNameChanged ->
                     _state.value = _state.value.copy(routeName = event.routeName)
             }
         }
