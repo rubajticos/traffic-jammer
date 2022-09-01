@@ -22,12 +22,12 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repository.getAllSections().collect {
+            /*repository.getAllSections().collect {
                 Log.d("MRMR", "new sections !")
                 val trafficSignalState = it.first().trafficSignals.first().changes[2]
                 Log.d("MRMR", trafficSignalState.toString())
                 Log.d("MRMR", "IDS = ${it.map { it.id }.joinToString(", ")}")
-            }
+            }*/
         }
 
         viewModelScope.launch(Dispatchers.IO) {

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
+import pl.rubajticos.trafficjammer.ui.add_section.AddSectionScreen
 import pl.rubajticos.trafficjammer.ui.theme.TrafficSignalInfoTheme
 
 @AndroidEntryPoint
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    AddSectionScreen()
                 }
             }
         }

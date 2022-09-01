@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TrafficJammer</string>
+    <string name="route_name">Nazwa drogi</string>
+    <string name="new_section">Nowy odcinek</string>
+    <string name="place">Miejscowość</string>
+    <string name="next">Dalej</string>
 </resources>
