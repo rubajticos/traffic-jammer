@@ -1,7 +1,11 @@
 package pl.rubajticos.trafficjammer.ui.add_section
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -18,7 +22,7 @@ import pl.rubajticos.trafficjammer.R
 @Preview
 @Composable
 fun PreviewAddSectionScreen() {
-    EnterSectionDetailsScreen("Test", {}, "Test", {}, true, {})
+    EnterSectionDetailsScreen("Test", {}, "Test", {}, true, {}, "")
 }
 
 @Composable
@@ -29,10 +33,11 @@ fun AddSectionScreen(viewModel: AddSectionViewModel = hiltViewModel()) {
         onRouteNameChange = {
             viewModel.handleUiEvent(AddSectionScreenContract.UiEvent.OnRouteNameChanged(it))
         },
-        place = "",
-        onPlaceChange = {},
-        nextButtonActive = false,
-        onNextButtonTap = {}
+        place = state.value.place,
+        onPlaceChange = { viewModel.handleUiEvent(AddSectionScreenContract.UiEvent.OnPlaceChanged(it)) },
+        nextButtonActive = state.value.isActionButtonEnabled,
+        onNextButtonTap = { viewModel.handleUiEvent(AddSectionScreenContract.UiEvent.OnActionButtonTap) },
+        error = state.value.error
     )
 }
 
@@ -43,7 +48,8 @@ fun EnterSectionDetailsScreen(
     place: String,
     onPlaceChange: (String) -> Unit,
     nextButtonActive: Boolean,
-    onNextButtonTap: () -> Unit
+    onNextButtonTap: () -> Unit,
+    error: String?,
 ) {
     Column(
         modifier = Modifier
@@ -75,6 +81,14 @@ fun EnterSectionDetailsScreen(
             placeholder = stringResource(id = R.string.place),
             label = stringResource(id = R.string.place)
         )
+        if (error != null) {
+            Text(
+                text = error,
+                color = Color.Red,
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = 20.sp
+            )
+        }
 
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             Button(

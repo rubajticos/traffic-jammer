@@ -1,5 +1,6 @@
 package pl.rubajticos.trafficjammer.ui.add_section
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -26,18 +27,95 @@ class AddSectionViewModel @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 AddSectionScreenContract.UiEvent.CreateSection -> trySaveSection()
-                is AddSectionScreenContract.UiEvent.OnGreenLightDateChanged ->
-                    _state.value = _state.value.copy(greenLightTime = event.date)
-                is AddSectionScreenContract.UiEvent.OnRedLightDateChanged ->
-                    _state.value = _state.value.copy(redLightTime = event.date)
-                is AddSectionScreenContract.UiEvent.OnSecondGreenLightDateChanged ->
-                    _state.value = _state.value.copy(secondGreenLightTime = event.date)
-                is AddSectionScreenContract.UiEvent.OnDirectionToChanges ->
-                    _state.value = _state.value.copy(trafficSignalDirectionTo = event.direction)
-                is AddSectionScreenContract.UiEvent.OnRouteNameChanged ->
-                    _state.value = _state.value.copy(routeName = event.routeName)
+                is AddSectionScreenContract.UiEvent.OnGreenLightDateChanged -> {
+                    _state.value = _state.value.copy(
+                        greenLightTime = event.date,
+                    )
+                }
+                is AddSectionScreenContract.UiEvent.OnRedLightDateChanged -> {
+                    _state.value = _state.value.copy(
+                        redLightTime = event.date,
+                    )
+                }
+                is AddSectionScreenContract.UiEvent.OnSecondGreenLightDateChanged -> {
+                    _state.value = _state.value.copy(
+                        secondGreenLightTime = event.date,
+                    )
+                }
+                is AddSectionScreenContract.UiEvent.OnDirectionToChanges -> {
+                    _state.value = _state.value.copy(
+                        trafficSignalDirectionTo = event.direction,
+                    )
+                }
+                is AddSectionScreenContract.UiEvent.OnRouteNameChanged -> {
+                    _state.value = _state.value.copy(
+                        routeName = event.routeName,
+                    )
+                }
+                AddSectionScreenContract.UiEvent.OnActionButtonTap -> {
+                    handleActionButton()
+                }
+                is AddSectionScreenContract.UiEvent.OnPlaceChanged -> {
+                    _state.value = _state.value.copy(
+                        place = event.place,
+                    )
+                }
+            }
+            updateActionButtonEnableState()
+        }
+
+    private fun updateActionButtonEnableState() {
+        val state = _state.value
+        val enabled = when (state.screenState) {
+            AddSectionScreenContract.AddSectionScreenState.EnterDirection -> {
+                state.routeName.isNotBlank() && state.place.isNotBlank()
+            }
+            AddSectionScreenContract.AddSectionScreenState.EnterGreenLight -> {
+                state.greenLightTime != null
+            }
+            AddSectionScreenContract.AddSectionScreenState.EnterRedLight -> {
+                state.redLightTime != null
+            }
+            AddSectionScreenContract.AddSectionScreenState.EnterSecondGreenLight -> {
+                state.secondGreenLightTime != null
+            }
+            AddSectionScreenContract.AddSectionScreenState.Loading -> false
+            AddSectionScreenContract.AddSectionScreenState.Success -> false
+        }
+
+        Log.d("MRMR", " Action button state = $enabled")
+        _state.value = _state.value.copy(isActionButtonEnabled = enabled)
+    }
+
+    private suspend fun handleActionButton() {
+        when (_state.value.screenState) {
+            AddSectionScreenContract.AddSectionScreenState.EnterDirection -> {
+                _state.value =
+                    _state.value.copy(
+                        screenState = AddSectionScreenContract.AddSectionScreenState.EnterGreenLight,
+                    )
+            }
+            AddSectionScreenContract.AddSectionScreenState.EnterGreenLight -> {
+                _state.value =
+                    _state.value.copy(
+                        screenState = AddSectionScreenContract.AddSectionScreenState.EnterRedLight,
+                    )
+            }
+            AddSectionScreenContract.AddSectionScreenState.EnterRedLight -> {
+                _state.value =
+                    _state.value.copy(
+                        screenState = AddSectionScreenContract.AddSectionScreenState.EnterSecondGreenLight,
+                    )
+            }
+            AddSectionScreenContract.AddSectionScreenState.EnterSecondGreenLight -> {
+                trySaveSection()
+            }
+            AddSectionScreenContract.AddSectionScreenState.Loading -> {}
+            AddSectionScreenContract.AddSectionScreenState.Success -> { // TODO: Navigate to sections list }
             }
         }
+        updateActionButtonEnableState()
+    }
 
     private suspend fun trySaveSection() {
         _state.value = _state.value.copy(error = null)
